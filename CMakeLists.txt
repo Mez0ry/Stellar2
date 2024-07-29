@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.16 FATAL_ERROR)
 
 include(FindPackageHandleStandardArgs)
 
-project(Stellar LANGUAGES CXX VERSION 0.18.1)
+project(Stellar)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED YES)
@@ -41,7 +41,7 @@ if(spdlog_FOUND)
 endif()
  
 add_library(Stellar
-	Stellar/Gui/Button.hpp
+Stellar/GUI/Button.hpp
 	Stellar/AABB.hpp
 	Stellar/AABB.cpp
 	Stellar/Action.hpp
@@ -82,7 +82,6 @@ add_library(Stellar
 	Stellar/Window.cpp
 	Stellar/WindowInput.hpp
 	Stellar/WindowInput.cpp
-
 )
 
 target_include_directories(Stellar PUBLIC ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARIES} ${SDL2_TTF_LIBRARIES} ${SDL2_MIXER_LIBRARIES} ${SPDLOG_LIBRARIES})
