@@ -1,2 +1,2 @@
 # Stellar
-SDL wrapper
+SDL2 API
