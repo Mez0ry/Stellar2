@@ -2,19 +2,15 @@
 #define __STELLAR_COLOR_HPP__
 #include "SDL2/SDL_pixels.h"
 #include <cstdint>
+#include <algorithm>
 
 struct Color {
   uint8_t r, g, b, a;
   
   Color() : r(0), g(0), b(0), a(0){};
   Color(SDL_Color color) : r(color.a), g(color.g), b(color.b), a(color.a) {}
-  Color(uint8_t r, uint8_t g, uint8_t b, uint8_t a) {
-    this->r = r;
-    this->g = g;
-    this->b = b;
-    this->a = a;
-  }
-  
+  constexpr Color(uint8_t r, uint8_t g, uint8_t b, uint8_t a) : r{r},g{g},b{b},a{a} {}
+
   ~Color() = default;
 
   /**
@@ -187,7 +183,7 @@ struct Color {
 
   /**
    * @todo adaptive blending
-   */
+  */
 
   operator SDL_Color() const { return SDL_Color{r, g, b, a}; }
 
@@ -204,4 +200,15 @@ struct Color {
 
 private:
 };
+
+constexpr Color color_red_t    = Color(255,0,0,255);
+constexpr Color color_blue_t   = Color(0,0,255,255);
+constexpr Color color_aqua_t   = Color(0,255,255,255);
+constexpr Color color_yellow_t = Color(250,250,55,255);
+constexpr Color color_purple_t = Color(160,32,240,255);
+constexpr Color color_white_t  = Color(255,255,255,255);
+constexpr Color color_black_t  = Color(0,0,0,255);
+constexpr Color color_green_t  = Color(0,255,0,255);
+constexpr Color color_orange_t = Color(255,165,0,255);
+
 #endif //!__STELLAR_COLOR_HPP__

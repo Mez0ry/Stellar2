@@ -2,6 +2,7 @@
 #define __STELLAR_HOVERABLE_HPP__
 #include "Rect.hpp"
 #include <functional>
+#include "AABB.hpp"
 
 template <class _Ty,typename ... _Args>
 class Hoverable : public _Ty{
@@ -10,13 +11,13 @@ public:
 
   ~Hoverable() = default;
 
-  template <typename _OnClickAction> 
-  void OnHover(_OnClickAction action) {
+  template <typename _OnHoverAction> 
+  void OnHover(_OnHoverAction action) {
     m_OnHover = action;
   }
   
   void ExecuteOnHover() { m_OnHover.Execute();}
-
+  
   bool IsHovered() const {
     if((AABB::PointIsOnObject(MouseInput::GetMousePosition(), (*this)))){
         m_IsHovered = true;

@@ -120,8 +120,7 @@ public:
   Core::Ref<SDL_Texture> LoadTexture(Renderer &renderer,const std::string &path, Deleter deleter = TextureDeleter()) {
     Reset();
 
-    m_Texture = Core::Ref<SDL_Texture>(IMG_LoadTexture(renderer, path.c_str()),
-                                       deleter);
+    m_Texture = Core::Ref<SDL_Texture>(IMG_LoadTexture(renderer, path.c_str()),deleter);
     if (m_Texture == nullptr) {
       STELLAR_CORE_ERROR(
           "Texture::LoadTexture(Renderer& renderer,const std::string &path : "
@@ -133,8 +132,7 @@ public:
     return m_Texture;
   }
 
-  [[nodiscard]] static Core::Ref<SDL_Texture>
-  CreateTextureFromSurface(const Core::Ref<Renderer> renderer, SDL_Surface *surface);
+  [[nodiscard]] static Core::Ref<SDL_Texture> CreateTextureFromSurface(const Core::Ref<Renderer> renderer, SDL_Surface *surface);
   [[nodiscard]] static Core::Ref<SDL_Texture> CreateTextureFromSurface(Renderer &renderer, SDL_Surface *surface);
 
   [[nodiscard]] static Core::Ref<SDL_Texture> CreateTexture(const Core::Ref<Renderer> renderer, uint32_t format, int access,int w, int h);
@@ -145,7 +143,7 @@ public:
   void Reset();
 
   /**
-   * @return Returns the number of different shared_ptr instances (this
+   * @return the number of different shared_ptr instances (this
    * included) managing inner SDL_Texture pointer
    */
   long TextureUseCount() { return m_Texture.use_count(); }

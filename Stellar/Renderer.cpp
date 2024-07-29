@@ -56,8 +56,10 @@ void Renderer::SetRenderDrawColor(const Color &color) {
 void Renderer::Render(const Texture &texture) {
   auto& dst_rect = texture.GetRect<DestRect>();
   auto& src_rect = texture.GetRect<SourceRect>();
-  
-  if(SDL_RenderCopyEx(m_Renderer,texture, (!src_rect.IsEmpty()) ? src_rect : nullptr,(!dst_rect.IsEmpty()) ? dst_rect : nullptr,texture.GetAngle(),texture.GetOrigin(),texture.GetFlip())){
+  auto* s_rect_res = (!src_rect.IsEmpty()) ? static_cast<const SDL_Rect*>(src_rect): nullptr;
+  auto* d_rect_res = (!dst_rect.IsEmpty()) ? static_cast<const SDL_Rect*>(dst_rect): nullptr;
+
+  if(SDL_RenderCopyEx(m_Renderer,texture, s_rect_res,d_rect_res,texture.GetAngle(),texture.GetOrigin(),texture.GetFlip())){
     STELLAR_CORE_ERROR("Renderer::Renderer(const Texture& texture), Failed to render texture, SDL Error: {0}, Failed at {1}:{2}", SDL_GetError(),STELLAR_FILENAME,STELLAR_LINE);
   }
 }
@@ -65,8 +67,10 @@ void Renderer::Render(const Texture &texture) {
 void Renderer::BlitSurface(Surface &src,SDL_Surface* dst){
   auto& dst_rect = src.GetRect<DestRect>();
   auto& src_rect = src.GetRect<SourceRect>();
+  auto* s_rect_res = (!src_rect.IsEmpty()) ? static_cast<const SDL_Rect*>(src_rect): nullptr;
+  auto* d_rect_res = (!dst_rect.IsEmpty()) ? static_cast<SDL_Rect*>(dst_rect): nullptr;
 
-  if(SDL_BlitSurface(src,(!src_rect.IsEmpty()) ? src_rect : nullptr,dst,(!dst_rect.IsEmpty()) ? dst_rect : nullptr)){
+  if(SDL_BlitSurface(src,s_rect_res,dst,d_rect_res)){
     STELLAR_CORE_ERROR("Renderer::BlitSurface(const Surface& src,SDL_Surface* dst), Failed to blit surface, SDL Error: {0}, Failed at {1}:{2}", SDL_GetError(),STELLAR_FILENAME,STELLAR_LINE);
   }
 }
@@ -74,7 +78,10 @@ void Renderer::BlitSurface(Surface &src,SDL_Surface* dst){
 void Renderer::ScaledSurface(Surface& src,SDL_Surface* dst){
   auto& dst_rect = src.GetRect<DestRect>();
   auto& src_rect = src.GetRect<SourceRect>();
-  if(SDL_BlitScaled(src,(!src_rect.IsEmpty()) ? src_rect : nullptr,dst,(!dst_rect.IsEmpty()) ? dst_rect : nullptr)){
+  auto* s_rect_res = (!src_rect.IsEmpty()) ? static_cast<const SDL_Rect*>(src_rect): nullptr;
+  auto* d_rect_res = (!dst_rect.IsEmpty()) ? static_cast<SDL_Rect*>(dst_rect): nullptr;
+
+  if(SDL_BlitScaled(src,s_rect_res,dst,d_rect_res)){
     STELLAR_CORE_ERROR("Renderer::ScaledSurface(Surface& src,SDL_Surface* dst), Failed to blit surface, SDL Error: {0}, Failed at {1}:{2}", SDL_GetError(),STELLAR_FILENAME,STELLAR_LINE);
   }
 }

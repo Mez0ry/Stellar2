@@ -1,5 +1,6 @@
 #ifndef __OBJECT_SIZE_HPP__
 #define __OBJECT_SIZE_HPP__
+#include <cstdint>
 
 struct ObjectSize {
   ObjectSize() = default;
@@ -99,6 +100,22 @@ struct ObjectSize {
 
   bool operator!=(const ObjectSize& other) const {
     return !(*this == other);
+  }
+  
+  bool operator<(const ObjectSize& other) const{
+    return (this->h_ < other.h_ && this->w_ < other.w_);
+  }
+
+  bool operator<(const uint8_t scalar) const{
+    return (this->h_ < scalar && this->w_ < scalar);
+  }
+
+  bool operator>(const ObjectSize& other) const{
+    return (this->h_ > other.h_ && this->w_ > other.w_);
+  }
+
+  bool operator>(const uint8_t scalar) const{
+    return (this->h_ > scalar && this->w_ > scalar);
   }
   
 private:
