@@ -16,7 +16,7 @@ bool KeyboardInput::IsReleased(uint32_t key) {
   return !(KeyboardInput::m_Keys[key]);
 }
 
-size_t KeyboardInput::size() { return KeyboardInput::m_Keys.size(); }
+uint32_t KeyboardInput::Size() noexcept { return KeyboardInput::m_Keys.size(); }
 
 void KeyboardInput::ChangeState(uint32_t key, bool value) {
   if (IsKeyOutOfrange(key)) {

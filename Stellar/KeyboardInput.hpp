@@ -1,7 +1,7 @@
 #ifndef __KEYBOARD_INPUT__HPP__
 #define __KEYBOARD_INPUT__HPP__
 #include "SDL2/SDL_keyboard.h"
-#include "algorithm"
+#include <algorithm>
 #include <bitset>
 
 class KeyboardInput {
@@ -13,8 +13,8 @@ public:
 
   static bool IsReleased(uint32_t key);
 
-  static size_t size();
-
+  static uint32_t Size() noexcept;
+  
   static void ChangeState(uint32_t key, bool value);
   std::bitset<351UL>::reference operator[](uint32_t key);
 
