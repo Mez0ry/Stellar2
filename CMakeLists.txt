@@ -40,8 +40,8 @@ if(spdlog_FOUND)
 	message("sdplog found")
 endif()
  
-add_library(Stellar
-Stellar/GUI/Button.hpp
+add_library(Stellar STATIC
+    Stellar/GUI/Button.hpp
 	Stellar/AABB.hpp
 	Stellar/AABB.cpp
 	Stellar/Action.hpp
@@ -49,13 +49,14 @@ Stellar/GUI/Button.hpp
 	Stellar/Color.hpp
 	Stellar/Core.hpp
 	Stellar/Draggable.hpp
+	Stellar/KeyboardInput.cpp
+	Stellar/KeyboardInput.hpp
 	Stellar/EventHandler.hpp
 	Stellar/EventHandler.cpp
 	Stellar/Font.hpp
 	Stellar/Font.cpp
 	Stellar/Hoverable.hpp
 	Stellar/init_library.hpp
-	Stellar/KeyboardInput.hpp
 	Stellar/Literals.hpp
 	Stellar/Logger.hpp
 	Stellar/Logger.cpp
