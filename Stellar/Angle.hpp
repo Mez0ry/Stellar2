@@ -32,7 +32,7 @@ public:
     return (*this);
   }
 
-  Angle operator*=(const Angle &angle) {
+  Angle operator*=(const Angle<_Ty> &angle) {
     (*this) *= angle;
     return (*this);
   }
@@ -42,34 +42,50 @@ public:
     return (*this);
   }
 
-  inline Angle operator+(const _Ty value) {
-    return Angle((*this) + value);
+  inline Angle<_Ty> operator+(const _Ty value) {
+    return Angle<_Ty>((*this) + value);
   }
 
-  inline Angle operator-(const _Ty value) {
+  inline Angle<_Ty> operator-(const _Ty value) {
     return Angle((*this) - value);
   }
 
-  inline Angle operator*(const _Ty value) {
+  inline Angle<_Ty> operator*(const _Ty value) {
     return (this->GetAngle() + value);
   }
 
-  inline Angle operator*(const Angle &angle) {
+  inline Angle<_Ty> operator*(const Angle<_Ty> &angle) {
     return (this->GetAngle() * angle.GetAngle());
   }
 
-  inline Angle operator/(const _Ty value) {
+  inline Angle<_Ty> operator/(const _Ty value) {
     return (this->GetAngle() / value);
   }
 
   operator _Ty() const noexcept { return m_Angle; }
+
+  static _Ty Degree2Rad(double angle){
+    return (angle * ( M_PI / 180));
+  }
+
+  static _Ty Degree2Rad(const Angle<_Ty>& angle){
+    return (angle.GetAngle() * ( M_PI / 180));
+  }
+
+  static _Ty Rad2Degree(double angle_rad){
+    return (angle_rad * (180 / M_PI));
+  }
+
+  static _Ty Rad2Degree(const Angle<_Ty>& angle_rad){
+    return (angle_rad.GetAngle() * (180 / M_PI));
+  }
 
 private:
   _Ty m_Angle;
 };
 
 using Anglef = Angle<float>;
-using Angled = Angle<float>;
+using Angled = Angle<double>;
 using Anglei = Angle<int>;
 
 #endif //! __STELLAR_ANGLE_HPP__

@@ -85,3 +85,13 @@ void Texture::QueryTexture(const Texture &texture, uint32_t *format_out, int *ac
     size_out->SetHeight(h);
   }
 }
+
+double Texture::RotateTowards(const Pointi pos){
+  m_Angle = Angled::Rad2Degree(Pointi::GetRotationAngle(GetPosition(),pos));
+  return m_Angle.GetAngle();
+}
+
+double Texture::RotateTowards(const Texture& texture){
+  m_Angle = Angled::Rad2Degree(Vec2i::GetRotationAngle(texture.GetRect().Center(),texture.GetRect().Center()));
+  return m_Angle.GetAngle();
+}

@@ -67,17 +67,30 @@ struct Vec2 {
     return res.Length();
   }
 
-  float GetMaxComponent() const { return std::max(x, y); }
+  /**
+   * @brief Get the maximum number of 2 components
+   * 
+   * @return max component of type '_Ty'
+  */
+  _Ty GetMaxComponent() const { return std::max(x, y); }
 
-  float GetMinComponent() const { return std::min(x, y); }
+  /**
+   * @brief Get the minimum number of 2 components
+   * 
+   * @return min component of type '_Ty'
+  */
+  _Ty GetMinComponent() const { return std::min(x, y); }
 
-  float Angle(const Vec2<_Ty> &other) const {
-    return std::acos(this->DotProduct((*this), other) / Magnitude() *
-                     other.Magnitude());
-  }
-
-  static float Angle(const Vec2<_Ty> &lhs, const Vec2<_Ty> &rhs) {
-    return std::acos(DotProduct(lhs, rhs) / lhs.Magnitude() * rhs.Magnitude());
+  /**
+   * @brief Get the angle of rotation
+   * 
+   * @param lhs vector that we trying to rotate
+   * @param rhs target vector
+   * @return angle in radians
+   */
+  static double GetRotationAngle(const Vec2<_Ty> &lhs, const Vec2<_Ty> &rhs) {
+    Vec2<_Ty> target_positive_perpendicular = (rhs - lhs).PositivePerpendicular();
+    return ( atan2(target_positive_perpendicular.y, target_positive_perpendicular.x));
   }
 
   /**

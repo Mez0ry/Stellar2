@@ -168,7 +168,23 @@ public:
   const SDL_Point *GetOrigin() const { return m_Origin; }
 
   static void QueryTexture(const Texture &texture, uint32_t *format_out, int *access_out, ObjectSize *size_out);
-  
+
+  /**
+   * @brief Rotates the center of texture towards point
+   * 
+   * @param point the point towards which the texture will be rotated
+   * @return angle in degrees
+  */
+  double RotateTowards(const Pointi point);
+
+  /**
+   * @brief Rotates the center of texture towards another texture
+   * 
+   * @param texture the texture towards which we gonna do rotation
+   * @return angle in degrees
+  */
+  double RotateTowards(const Texture& texture);
+
 public:
   SDL_Texture *operator*() { return (m_Texture.get()); }
 
