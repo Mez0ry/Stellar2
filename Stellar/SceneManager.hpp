@@ -26,6 +26,8 @@ public:
    */
   template <typename TScene, typename... TArgs> 
   void AddScene(TArgs &&...args) {
+    static_assert(std::is_base_of_v<GameScene,TScene>,"Scene that you trying to add must be base of 'GameScene' ");
+
     if (!HasScene<TScene>()) {
       auto curr_scene = Core::CreateRef<TScene>(std::forward<TArgs>(args)...);
       auto hash_code_t = GetHashCode<TScene>();
@@ -45,6 +47,8 @@ public:
   /// @param ...child_args child args to construct child scene object
   template <typename TRootScene,typename TChildScene, typename ... TChildArgs>
   void AddChildScene(TChildArgs &&... child_args){
+    static_assert(std::is_base_of_v<GameScene,TChildScene>,"Child scene that you trying to add must be base of 'GameScene' ");
+    
     auto root_it = GetSceneIt<TRootScene>(m_RootScenesMap);
     if(root_it == m_RootScenesMap.end()) 
       return;

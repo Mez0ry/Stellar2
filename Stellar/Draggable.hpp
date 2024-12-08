@@ -16,8 +16,8 @@ public:
   Draggable() : m_t(0.0),m_IsDraggable(false){}
   ~Draggable() = default;
   
-  template<typename _OnDragAction>
-  void OnDrag(_OnDragAction on_drag_action){
+  template<typename TOnDragAction>
+  void OnDrag(TOnDragAction on_drag_action){
     m_Action = on_drag_action;
   }
 

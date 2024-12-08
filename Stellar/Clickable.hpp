@@ -11,8 +11,8 @@ public:
   Clickable() = default;
   ~Clickable() = default;
 
-  template <typename _OnClickAction> 
-  void OnClick(_OnClickAction action) {
+  template <typename TOnClickAction> 
+  void OnClick(TOnClickAction action) {
     m_OnClick = action;
   }
 

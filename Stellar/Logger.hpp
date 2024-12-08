@@ -44,7 +44,7 @@ private:
 namespace details{
 
   template<typename TFunc, typename TTag>
-  inline void LogOnce(TFunc func, TTag tag){
+  inline void LogOnce(TFunc func, [[maybe_unused]] TTag tag){
     static std::once_flag flag;
     std::call_once(flag,func);
   }

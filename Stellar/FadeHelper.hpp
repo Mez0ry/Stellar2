@@ -8,15 +8,14 @@
 /// @brief 
 /// @tparam TRep 
 /// @tparam TPeriod 
-/// @tparam TAction callback that will be used if 
-/// @tparam ...TArgs 
-template<typename TRep, typename TPeriod, typename ... TArgs>
+/// @tparam TActionArgs type args for action callback
+template<typename TRep, typename TPeriod, typename ... TActionArgs>
 class FadeHelper{
 public:
     FadeHelper() : m_StartFadeTimerOnce(false), m_IsFinished(false) {}
 
-    template <typename _TAction>
-    void Setup(std::chrono::duration<TRep,TPeriod> duration, _TAction action){
+    template <typename TAction>
+    void Setup(std::chrono::duration<TRep,TPeriod> duration, TAction action){
         m_Duration = duration;
         m_Action = action;
         
@@ -24,36 +23,49 @@ public:
         m_IsFinished = false;
     }
 
-    void Update(){
+    /**
+     * @brief executes 'action' when specified duration time is elapsed
+     */
+    auto AsyncExecuteAfter(){
+        TimedAction<TRep,TPeriod,Action<TActionArgs ...> > action(m_Duration,m_Action);
+        return action();
+    }
+    
+    /**
+     * @brief executes 'action' during specified duration
+     * @returns true if 'action' successfully finished false otherwise
+     */
+    bool ExecuteFor(){
         if(m_FadeTimer.GetTicks() < m_Duration.count()){
             if(!m_StartFadeTimerOnce){
                 m_FadeTimer.Start();
                 m_StartFadeTimerOnce = !m_StartFadeTimerOnce;
             }
 
+            m_Action();
+
         }else{
             m_IsFinished = true;
         }
+
+        return m_IsFinished;
     }
     
     bool IsFinished() const {return m_IsFinished;}
-    
-    void Execute(){
-        m_Action();
-    }
 
     void Reset(){
         m_FadeTimer.Stop();
         m_StartFadeTimerOnce = false;
+        m_IsFinished = false;
     }
 
     Timer& GetFadeTimer(){
         return m_FadeTimer;
     }
-
+    
 private:
     std::chrono::duration<TRep,TPeriod> m_Duration;
-    Action<TArgs ...> m_Action;
+    Action<TActionArgs ...> m_Action;
     bool m_StartFadeTimerOnce;
     Timer m_FadeTimer;
     bool m_IsFinished;

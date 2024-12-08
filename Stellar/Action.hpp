@@ -45,6 +45,7 @@ public:
   void Execute() { 
     Execute(m_Args); 
   }
+
   explicit operator bool() const noexcept { return static_cast<bool>(m_Action); }
 };
 
@@ -54,28 +55,23 @@ inline Action<TArgs...> MakeAction(TCallback &&cb, TArgs &&...args) {
 }
 
 
-template <typename _Rep, typename _Period, typename _ActionTy>
+template <typename TRep, typename TPeriod, typename TAction>
 class TimedAction {
 public:
-  TimedAction(std::chrono::duration<_Rep, _Period> duration,
-              const _ActionTy &action)
+  TimedAction(std::chrono::duration<TRep, TPeriod> duration, TAction& action)
       : m_Duration(duration), m_Action(action) {}
+
   ~TimedAction() = default;
 
-  auto operator()() { return TimedAction::Execute(m_Duration, m_Action); }
-
-  [[nodiscard]] static std::future<void>
-  Execute(std::chrono::duration<_Rep, _Period> duration,
-          const _ActionTy &action) {
-    return (std::async(std::launch::async, [duration, action]() {
-      std::this_thread::sleep_for(duration);
-      action.Execute();
-    }));
+  [[nodiscard]]  auto operator()() { return (std::async(std::launch::async, [&]() {
+      std::this_thread::sleep_for(m_Duration);
+      return m_Action();
+    })); 
   }
 
 private:
-  std::chrono::duration<_Rep, _Period> m_Duration;
-  const _ActionTy &m_Action;
+  std::chrono::duration<TRep, TPeriod> m_Duration;
+  TAction &m_Action;
 };
 
 #endif //!__STELLAR_ACTION_HPP__
