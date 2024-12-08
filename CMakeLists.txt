@@ -39,51 +39,63 @@ endif()
 if(spdlog_FOUND)
 	message("sdplog found")
 endif()
- 
+
+set(STELLAR_SOURCES  
+	src/AABB.cpp
+	src/Engine.cpp
+	src/EventHandler.cpp
+	src/Font.cpp
+	src/KeyboardInput.cpp
+	src/Logger.cpp
+	src/MouseInput.cpp
+	src/Renderer.cpp
+	src/SceneManager.cpp
+	src/Surface.cpp
+	src/Text.cpp
+	src/Texture.cpp
+	src/Timer.cpp
+	src/Window.cpp
+	src/WindowInput.cpp
+)
+
+set(STELLAR_HEADERS
+	include/GUI/Button.hpp
+	include/AABB.hpp
+	include/Action.hpp
+	include/Angle.hpp
+	include/Clickable.hpp
+	include/Color.hpp
+	include/Core.hpp
+	include/Draggable.hpp
+	include/Engine.hpp
+	include/EventHandler.hpp
+	include/FadeHelper.hpp
+	include/Font.hpp
+	include/GameScene.hpp
+	include/Hoverable.hpp
+	include/init_library.hpp
+	include/KeyboardInput.hpp
+	include/Literals.hpp
+	include/Logger.hpp
+	include/Matrix.hpp
+	include/MouseInput.hpp
+	include/ObjectSize.hpp
+	include/Rect.hpp
+	include/Renderer.hpp
+	include/SceneManager.hpp
+	include/SourceDestRect.hpp
+	include/Surface.hpp
+	include/Text.hpp
+	include/Texture.hpp
+	include/TextureGuard.hpp
+	include/Timer.hpp
+	include/Vector.hpp
+	include/Window.hpp
+	include/WindowInput.hpp
+)
+
 add_library(Stellar STATIC
-    Stellar/GUI/Button.hpp
-	Stellar/AABB.hpp
-	Stellar/AABB.cpp
-	Stellar/Action.hpp
-	Stellar/Clickable.hpp
-	Stellar/Color.hpp
-	Stellar/Core.hpp
-	Stellar/Draggable.hpp
-	Stellar/KeyboardInput.cpp
-	Stellar/KeyboardInput.hpp
-	Stellar/EventHandler.hpp
-	Stellar/EventHandler.cpp
-	Stellar/Font.hpp
-	Stellar/Font.cpp
-	Stellar/Hoverable.hpp
-	Stellar/init_library.hpp
-	Stellar/Literals.hpp
-	Stellar/Logger.hpp
-	Stellar/Logger.cpp
-	Stellar/MouseInput.hpp
-	Stellar/MouseInput.cpp
-	Stellar/ObjectSize.hpp
-	Stellar/Rect.hpp
-	Stellar/Renderer.hpp
-	Stellar/Renderer.cpp
-	Stellar/Engine.hpp
-	Stellar/Engine.cpp
-	Stellar/SourceDestRect.hpp
-	Stellar/Surface.hpp
-	Stellar/Surface.cpp
-	Stellar/Text.hpp
-	Stellar/Text.cpp
-	Stellar/Texture.hpp
-	Stellar/Texture.cpp
-	Stellar/TextureGuard.hpp
-	Stellar/Timer.hpp
-	Stellar/Timer.cpp
-	Stellar/Timestep.hpp
-	Stellar/Vector.hpp
-	Stellar/Window.hpp
-	Stellar/Window.cpp
-	Stellar/WindowInput.hpp
-	Stellar/WindowInput.cpp
+    ${STELLAR_SOURCES} ${STELLAR_HEADERS}
 )
 
 target_include_directories(Stellar PUBLIC ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARIES} ${SDL2_TTF_LIBRARIES} ${SDL2_MIXER_LIBRARIES} ${SPDLOG_LIBRARIES})
