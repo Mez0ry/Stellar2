@@ -25,10 +25,7 @@ struct Color {
     this->a = other.a;
     return (*this);
   }
-
-  /**
-   * @todo Move semantics
-   */
+  
   Color(Color &&other) noexcept { (*this) = std::move(other); }
 
   Color &operator=(Color &&other) noexcept {
@@ -47,9 +44,7 @@ struct Color {
   uint32_t GetAsU32(){
     return r | (g << 8) | (b << 16) | (a << 24);
   }
-  /**
-   * @todo default math operations
-   */
+  
   friend Color operator+(Color lhs, const Color &other) {
     lhs.r += other.r;
     lhs.g += other.g;
@@ -103,9 +98,6 @@ struct Color {
     return (*this);
   }
 
-  /**
-   * @todo default math operations on scalar
-  */
    friend Color operator+(Color lhs, const uint8_t scalar) {
     lhs.r += scalar;
     lhs.g += scalar;

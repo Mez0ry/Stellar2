@@ -81,9 +81,9 @@ using TextureFlip = SDL_RendererFlip;
 class Texture : public SourceDestRect<Texture> {
 private:
   Angled m_Angle;
-  SDL_Point *m_Origin;
+  Vec2i m_Origin;
   TextureFlip m_TextureFlip;
-
+  
 public:
   Texture() noexcept;
 
@@ -164,8 +164,8 @@ public:
 
   void SetFlip(TextureFlip texture_flip) { m_TextureFlip = texture_flip; }
   TextureFlip GetFlip() const { return m_TextureFlip; }
-  void SetOrigin(const SDL_Point &origin) { *m_Origin = origin; }
-  const SDL_Point *GetOrigin() const { return m_Origin; }
+  void SetOrigin(const Vec2i &origin) { m_Origin = origin; }
+  const Vec2i& GetOrigin() const { return m_Origin; }
 
   static void QueryTexture(const Texture &texture, uint32_t *format_out, int *access_out, ObjectSize *size_out);
 

@@ -15,7 +15,7 @@ class Timer{
       void Pause();
       void UnPause();
 
-      Uint32 GetTicks();
+      Uint64 GetTicks();
 
       //Checks the status of the timer
       bool isStarted();
@@ -23,15 +23,14 @@ class Timer{
 
   private:
       //The clock time when the timer started
-      Uint32 m_StartTicks;
+      Uint64 m_StartTicks;
 
       //The ticks stored when the timer was paused
-      Uint32 m_PausedTicks;
+      Uint64 m_PausedTicks;
 
       //The timer status
       bool m_IsPaused;
       bool m_IsStarted;
 };
-
 
 #endif //!__STELLAR_TIMER_HPP__

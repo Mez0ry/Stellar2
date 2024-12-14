@@ -49,7 +49,7 @@ struct Vec2 {
    * @return magnitude
    */
   double Magnitude() const{
-     return this->Length(); 
+    return this->Length(); 
   }
 
   /**
@@ -258,7 +258,7 @@ using Pointd = Vec2d;
 template <typename TValue>
 struct fmt::formatter<Vec2<TValue>> {
     constexpr auto parse(format_parse_context& ctx) {
-        return ctx.end();
+      return ctx.end();
     }
 
     template <typename Context>
@@ -268,7 +268,7 @@ struct fmt::formatter<Vec2<TValue>> {
 };
 
 /**
- * @todo test this with different types
+ * TODO test this with different types
  */
 template <> struct std::hash<Vec2<>> {
   std::size_t operator()(const Vec2<> &k) const {

@@ -25,7 +25,7 @@ public:
   operator SDL_Window*() const noexcept{
     return m_Window;
   }
-
+  
 public:
   [[nodiscard]] SDL_Window *GetWindow() const { return m_Window; }
 

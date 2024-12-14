@@ -25,7 +25,7 @@ public:
   static void RegisterModule(){
     (RegisterModule<_Ts>(), ...);
   }
-
+  
   template <typename T>
   static void UnRegisterModule(){
     auto& context = instance();

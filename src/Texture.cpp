@@ -1,6 +1,6 @@
 #include "Texture.hpp"
 
-Texture::Texture() noexcept :m_Angle(0),m_Origin(nullptr), m_TextureFlip(TextureFlip::SDL_FLIP_NONE), m_Texture(nullptr) {}
+Texture::Texture() noexcept :m_Angle(0), m_TextureFlip(TextureFlip::SDL_FLIP_NONE), m_Texture(nullptr) {}
 
 Texture::Texture(SDL_Texture * texture){
   (*this) = texture;

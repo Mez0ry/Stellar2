@@ -15,7 +15,7 @@ void Timer::Start() {
   m_IsPaused = false;
 
   // Get the current clock time
-  m_StartTicks = SDL_GetTicks();
+  m_StartTicks = SDL_GetTicks64();
   m_PausedTicks = 0;
 }
 
@@ -37,7 +37,7 @@ void Timer::Pause() {
     m_IsPaused = true;
 
     // Calculate the paused ticks
-    m_PausedTicks = SDL_GetTicks() - m_StartTicks;
+    m_PausedTicks = SDL_GetTicks64() - m_StartTicks;
     m_StartTicks = 0;
   }
 }
@@ -47,21 +47,21 @@ void Timer::UnPause() {
     m_IsPaused = false;
 
     // Reset the starting ticks
-    m_StartTicks = SDL_GetTicks() - m_PausedTicks;
+    m_StartTicks = SDL_GetTicks64() - m_PausedTicks;
 
     // Reset the paused ticks
     m_PausedTicks = 0;
   }
 }
 
-Uint32 Timer::GetTicks() {
-  Uint32 time = 0;
+Uint64 Timer::GetTicks() {
+  Uint64 time = 0;
 
   if (m_IsStarted) {
     if (m_IsPaused) {
       time = m_PausedTicks;
     } else {
-      time = SDL_GetTicks() - m_StartTicks;
+      time = SDL_GetTicks64() - m_StartTicks;
     }
   }
 

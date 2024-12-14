@@ -45,6 +45,10 @@ public:
   void Execute() { 
     Execute(m_Args); 
   }
+  
+  void ExecuteRunTime(TArgs ... args){
+    m_Action(args ...);
+  }
 
   explicit operator bool() const noexcept { return static_cast<bool>(m_Action); }
 };
