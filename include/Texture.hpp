@@ -100,12 +100,21 @@ public:
     other.m_Texture = nullptr;
     this->m_src = std::move(other.m_src);
     this->m_dst = std::move(other.m_dst);
+    this->m_Origin = std::move(other.m_Origin);
+    this->m_Angle = std::move(m_Angle);
+
+    this->m_TextureFlip = std::move(other.m_TextureFlip);
+    other.m_TextureFlip = TextureFlip::SDL_FLIP_NONE;
+
   }
 
   Texture(const Texture &other) {
     this->m_Texture = other.m_Texture;
     this->m_src = other.m_src;
     this->m_dst = other.m_dst;
+    this->m_Origin = other.m_Origin;
+    this->m_TextureFlip = other.m_TextureFlip;
+    this->m_Angle = other.m_Angle;
   }
 
   template <typename TDeleter = TextureDeleter,
@@ -198,6 +207,11 @@ public:
 
     this->m_src = other.m_src;
     this->m_dst = other.m_dst;
+
+    this->m_Angle = other.m_Angle;
+    this->m_Origin = other.m_Origin;
+
+    this->m_TextureFlip = other.m_TextureFlip;
     return *this;
   }
 
@@ -222,6 +236,12 @@ public:
     this->m_dst = std::move(other.m_dst);
     this->m_src = std::move(other.m_src);
     this->m_Texture = std::move(other.m_Texture);
+
+    this->m_Angle = std::move(other.m_Angle);
+    this->m_Origin = std::move(other.m_Origin);
+
+    this->m_TextureFlip = std::move(other.m_TextureFlip);
+    other.m_TextureFlip = TextureFlip::SDL_FLIP_NONE;
 
     return *this;
   }

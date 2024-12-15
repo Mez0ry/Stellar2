@@ -31,6 +31,10 @@ public:
     }
   }
 
+  Color GetTextColor() const {
+    return m_Color;
+  }
+  
   void ChangeText(const std::string text){
     if(m_Text.GetLoadedText() != text){
       m_StrText = text;

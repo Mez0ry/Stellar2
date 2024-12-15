@@ -60,7 +60,7 @@ void Renderer::Render(const Texture &texture) {
   auto* d_rect_res = (!dst_rect.IsEmpty()) ? static_cast<const SDL_Rect*>(dst_rect): nullptr;
   
   SDL_Point origin = {texture.GetOrigin().x,texture.GetOrigin().y};
-
+  
   if(SDL_RenderCopyEx(m_Renderer,texture, s_rect_res,d_rect_res,texture.GetAngle(),&origin,texture.GetFlip())){
     STELLAR_CORE_ERROR("Renderer::Renderer(const Texture& texture), Failed to render texture, SDL Error: {0}, Failed at {1}:{2}", SDL_GetError(),STELLAR_FILENAME,STELLAR_LINE);
   }

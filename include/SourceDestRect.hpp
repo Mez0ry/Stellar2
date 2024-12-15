@@ -16,6 +16,24 @@ template <class, typename = SourceRect> constexpr bool is_src_rect_v = false;
 template <class TRect>
 constexpr bool is_src_rect_v<TRect, SourceRect> = std::is_same<TRect, SourceRect>::value;
 
+namespace details{
+
+
+template <typename T>
+class has_origin_func
+{
+  typedef char one;
+  struct two { char x[2]; };
+
+  template <typename C> static one test( decltype(&C::GetOrigin) ) ;
+  template <typename C> static two test(...);    
+
+public:
+  enum { value = sizeof(test<T>(0)) == sizeof(char) };
+};
+
+}//!details 
+
 template <class TDerived> 
 class SourceDestRect {
 protected:
@@ -31,6 +49,10 @@ public:
     } else if (is_dst_rect_v<TRect>) {
       m_dst = pos;
       m_dst = size;
+    }
+
+    if constexpr(details::has_origin_func<TDerived>::value){
+      Derived().SetOrigin(Vec2i(m_dst.w / 2, m_dst.h / 2));
     }
   }
 
@@ -93,6 +115,10 @@ public:
  template <class TRect = DestRect>
   const Vec2i BottomRight() const {
     return GetRect<TRect>().BottomRight();
+  }
+private:
+  TDerived& Derived(){
+    return static_cast<TDerived&>(*this);
   }
 };
 
