@@ -31,6 +31,11 @@ void Window::CreateWindowSurface(){
     m_WindowSurface = SDL_GetWindowSurface(m_Window);
 }
 
+void Window::SetIcon(const std::string& icon_path)
+{
+    SDL_SetWindowIcon(this->GetWindow(),m_IconSurface.LoadSurface(icon_path).get());
+}
+
 SDL_Surface* Window::GetWindowSurface(){
     return m_WindowSurface;
 }

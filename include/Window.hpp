@@ -20,6 +20,8 @@ public:
   void UpdateWindowSurface();
   void CreateWindowSurface();
 
+  void SetIcon(const std::string& icon_path);
+
   explicit operator bool() const noexcept { return (m_Window != nullptr); }
   
   operator SDL_Window*() const noexcept{
@@ -37,5 +39,6 @@ public:
 private:
   SDL_Window *m_Window;
   SDL_Surface* m_WindowSurface;
+  Surface m_IconSurface;
 };
 #endif //! __WINDOW_HPP__   
