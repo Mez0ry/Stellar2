@@ -24,6 +24,12 @@ public:
     m_ColorChanged = true;
   }
 
+  Button(const Texture& texture, const Core::Ref<TTF_Font>& font,const char* text, Color text_color) : m_StrText(text), m_Color(text_color),m_BtnPrevSize(0,0){
+    this->ShareSDLTexture(texture);
+    m_Text.ShareFont(font);
+    m_ColorChanged = true;
+  }
+
   void ChangeTextColor(Color color){
     if(m_Color != color){
       m_ColorChanged = true;
