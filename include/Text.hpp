@@ -69,6 +69,8 @@ public:
   }
 
   Texture& LoadText(const Core::Ref<Renderer> renderer,const char *text, const Color &color);
+  Texture& LoadText(const Core::Ref<Renderer> renderer,const Font& font,const char *text, const Color &color);
+  
   const std::string& GetLoadedText() const {return m_LoadedText;}
   const Color GetLoadedColor() const {return m_Color;}
   void Reset();

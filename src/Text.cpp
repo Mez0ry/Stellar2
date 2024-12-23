@@ -13,8 +13,7 @@ Text::Text(const Core::Ref<Renderer> renderer,const char* font_path, const int f
 
 Text::Text(const Core::Ref<Renderer> renderer,const Font& font, const char* text,const Color& color) : m_Color(color)
 {
-  ShareFont(font);
-  LoadText(renderer,text,m_Color);
+  LoadText(renderer,font,text,m_Color);
 }
 
 Text::~Text() noexcept
@@ -41,6 +40,11 @@ Texture& Text::LoadText(const Core::Ref<Renderer> renderer,const char *text, con
   m_TextTexture.ShareSDLTexture(Texture::CreateTextureFromSurface(renderer,surface));
   
   return m_TextTexture;
+}
+
+Texture& Text::LoadText(const Core::Ref<Renderer> renderer,const Font& font,const char *text, const Color &color){
+  ShareFont(font);
+  return LoadText(renderer,text,color);
 }
 
 void Text::Reset()
