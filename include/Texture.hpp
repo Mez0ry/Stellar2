@@ -101,7 +101,7 @@ public:
     this->m_src = std::move(other.m_src);
     this->m_dst = std::move(other.m_dst);
     this->m_Origin = std::move(other.m_Origin);
-    this->m_Angle = std::move(m_Angle);
+    this->m_Angle = std::move(other.m_Angle);
 
     this->m_TextureFlip = std::move(other.m_TextureFlip);
     other.m_TextureFlip = TextureFlip::SDL_FLIP_NONE;
