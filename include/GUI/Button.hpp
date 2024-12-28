@@ -9,32 +9,27 @@
 class Button : public Hoverable<Clickable<Texture>> {
   Text m_Text;
 public:
-  Button() : m_Text(nullptr),m_StrText(""),m_strTextChanged(false),m_Color(0,0,0,255),m_ColorChanged(true),m_BtnPrevSize(0,0){}
+  Button() : m_Text(nullptr),m_StrText(""),m_Color(0,0,0,255),m_BtnPrevSize(0,0){}
 
-  Button(const Texture& texture) : m_Text(nullptr),m_StrText(""),m_strTextChanged(false),m_Color(0,0,0,255),m_ColorChanged(true),m_BtnPrevSize(0,0){
+  Button(const Texture& texture) : m_Text(nullptr),m_StrText(""),m_Color(0,0,0,255),m_BtnPrevSize(0,0){
     this->ShareSDLTexture(texture);
   }
-  Button(const Texture& texture,const Text& text) : m_Text(text),m_StrText(""),m_strTextChanged(false),m_Color(0,0,0,255),m_ColorChanged(false),m_BtnPrevSize(0,0){
+  Button(const Texture& texture,const Text& text) : m_Text(text),m_StrText(""),m_Color(0,0,0,255),m_BtnPrevSize(0,0){
     this->ShareSDLTexture(texture);
   }
 
   Button(const Texture& texture, const char* font_path,const char* text, Color text_color) : m_StrText(text), m_Color(text_color),m_BtnPrevSize(0,0){
     this->ShareSDLTexture(texture);
     m_Text.LoadFont(font_path,15);
-    m_ColorChanged = true;
   }
 
   Button(const Texture& texture, const Core::Ref<TTF_Font>& font,const char* text, Color text_color) : m_StrText(text), m_Color(text_color),m_BtnPrevSize(0,0){
     this->ShareSDLTexture(texture);
     m_Text.ShareFont(font);
-    m_ColorChanged = true;
   }
 
   void ChangeTextColor(Color color){
-    if(m_Color != color){
-      m_ColorChanged = true;
-      m_Color = color;
-    }
+    m_Text.ChangeColor(color);
   }
 
   Color GetTextColor() const {
@@ -42,28 +37,20 @@ public:
   }
   
   void ChangeText(const std::string text){
-    if(m_Text.GetLoadedText() != text){
-      m_StrText = text;
-      m_strTextChanged = true;
-    }
+    m_Text.ChangeText(text.c_str());
   }
   
-  void Render(const Core::Ref<Renderer> renderer){
-    if(m_strTextChanged || m_ColorChanged){
-      m_StrText = (m_StrText.empty()) ? m_Text.GetLoadedText() : m_StrText;
-      m_Text.LoadText(renderer,m_StrText.c_str(),m_Color);
-    }
-    
+  void Render(const Core::Ref<Renderer> renderer,TextRenderType type = TextRenderType::BLENDED){
     if(m_BtnPrevPos != this->GetPosition() || m_BtnPrevSize != this->GetSize() || m_BtnPrevPos.IsEmpty()){
       m_BtnPrevPos = this->GetPosition();
       m_BtnPrevSize = this->GetSize();
 
-      if(m_Text && this->operator std::shared_ptr<SDL_Texture>()){
+      if(m_Text && this->SelfTexture()){
         ScaleTextSizeToFit(renderer,m_Text);
       }
     }
 
-    if(this->operator std::shared_ptr<SDL_Texture>()){
+    if(this->SelfTexture()){
       renderer->Render(this->SelfTexture());
     }
 
@@ -71,7 +58,7 @@ public:
       auto src_size = ObjectSize(0,0);
       m_Text->QueryTexture(m_Text,nullptr,nullptr,&src_size);
       m_Text->SetRect<SourceRect>({0,0},src_size);
-      renderer->Render(m_Text);
+      renderer->Render(m_Text,type);
     }
     
   }
@@ -90,15 +77,12 @@ private:
   auto center = this->GetRect<DestRect>().Center();
 
   text->SetRect<DestRect>(Vec2i(center.x - dest_size.HalfWidth(),center.y - dest_size.HalfHeight() ),dest_size);
-  text.LoadText(renderer,text.GetLoadedText().c_str(),text.GetLoadedColor());
+  text.LoadText(text.GetLoadedText().c_str(),text.GetLoadedColor());
  }
 
 private:
   std::string m_StrText;
-  bool m_strTextChanged;
-
   Color m_Color;
-  bool m_ColorChanged;
 
   Vec2i m_BtnPrevPos;
   ObjectSize m_BtnPrevSize;
