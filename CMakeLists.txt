@@ -1,8 +1,11 @@
 cmake_minimum_required(VERSION 3.16 FATAL_ERROR)
 
 include(FindPackageHandleStandardArgs)
+include(CheckIPOSupported)
+check_ipo_supported(RESULT ipo_is_supported OUTPUT error)
 
-project(Stellar)
+set(LibraryName Stellar)
+project(${LibraryName})
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED YES)
@@ -12,6 +15,15 @@ set(OS_BITNESS 64)
 if(CMAKE_SIZEOF_VOID_P EQUAL 4)
 	set(OS_BITNESS 32)
 endif()
+
+if(MSVC)
+	set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Release>:Release>")
+	set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+
+	target_compile_definitions("${CMAKE_PROJECT_NAME}" PUBLIC _CRT_SECURE_NO_WARNINGS)
+	set_target_properties("${CMAKE_PROJECT_NAME}" PROPERTIES LINK_FLAGS "/SUBSYSTEM:WINDOWS /ENTRY:mainCRTStartup")  
+endif()
+
 
 set(STELLAR_OUTPUT_DIR "${CMAKE_SOURCE_DIR}/build/lib/${OS_BITNESS}/${CMAKE_BUILD_TYPE}")
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${STELLAR_OUTPUT_DIR}")
@@ -51,68 +63,12 @@ if(spdlog_FOUND)
 	message("sdplog found")
 endif()
 
+file(GLOB_RECURSE PROJECT_HEADER_FILES CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/include/*.hpp")
 
-set(STELLAR_HEADERS
-	include/GUI/Button.hpp
-	include/AABB.hpp
-	include/Action.hpp
-	include/Angle.hpp
-	include/Clickable.hpp
-	include/Color.hpp
-	include/Core.hpp
-	include/Draggable.hpp
-	include/Engine.hpp
-	include/EventHandler.hpp
-	include/KeyFrame.hpp
-	include/Font.hpp
-	include/GameScene.hpp
-	include/Hoverable.hpp
-	include/init_library.hpp
-	include/KeyboardInput.hpp
-	include/Literals.hpp
-	include/Logger.hpp
-	include/Matrix.hpp
-	include/MouseInput.hpp
-	include/ObjectSize.hpp
-	include/Rect.hpp
-	include/Renderer.hpp
-	include/SceneManager.hpp
-	include/SourceDestRect.hpp
-	include/Surface.hpp
-	include/Text.hpp
-	include/Texture.hpp
-	include/TextureGuard.hpp
-	include/Timer.hpp
-	include/Vector.hpp
-	include/Window.hpp
-	include/WindowInput.hpp
-	include/Lerp.hpp
-	include/Easing.hpp
-)
-
-set(STELLAR_SOURCES  
-	src/AABB.cpp
-	src/Engine.cpp
-	src/EventHandler.cpp
-	src/Font.cpp
-	src/KeyboardInput.cpp
-	src/Logger.cpp
-	src/MouseInput.cpp
-	src/Renderer.cpp
-	src/SceneManager.cpp
-	src/Surface.cpp
-	src/Text.cpp
-	src/Texture.cpp
-	src/Timer.cpp
-	src/Window.cpp
-	src/WindowInput.cpp
-	src/Lerp.cpp
-	src/Easing.cpp
-	src/KeyFrame.cpp
-)
+file(GLOB_RECURSE PROJECT_SOURCE_FILES CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
 
 add_library(Stellar STATIC
-    ${STELLAR_SOURCES} ${STELLAR_HEADERS}
+    ${PROJECT_SOURCE_FILES} ${PROJECT_HEADER_FILES}
 )
 
 target_link_libraries(Stellar ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARIES} ${SDL2_TTF_LIBRARIES} ${SDL2_MIXER_LIBRARIES} ${SPDLOG_LIBRARIES})	
