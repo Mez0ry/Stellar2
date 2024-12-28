@@ -9,14 +9,13 @@
 #include "Surface.hpp"
 
 #include "Color.hpp"
-
 class Text : public Font{
 public:
   Text() noexcept;
-  Text(const Font& font) {ShareFont(font);}
-  Text(const Core::Ref<TTF_Font>& font) { ShareFont(font);}
-  Text(const Core::Ref<Renderer> renderer,const char* font_path, const int font_size, const char* text,const Color& color);
-  Text(const Core::Ref<Renderer> renderer,const Font& font, const char *text, const Color &color);
+  Text(const Font& font);
+  Text(const Core::Ref<TTF_Font>& font);
+  Text(const char* font_path, const int font_size, const char* text,const Color& color);
+  Text(const Font& font, const char *text, const Color &color);
 
   ~Text() noexcept;
 
@@ -68,12 +67,19 @@ public:
     return m_TextTexture;
   }
 
-  Texture& LoadText(const Core::Ref<Renderer> renderer,const char *text, const Color &color);
-  Texture& LoadText(const Core::Ref<Renderer> renderer,const Font& font,const char *text, const Color &color);
+  void ChangeText(const char* text);
+  void ChangeColor(const Color& color);
+  
+  void LoadText(const char *text, const Color &color);
+  void LoadText(const Font& font,const char *text, const Color &color);
   
   const std::string& GetLoadedText() const {return m_LoadedText;}
   const Color GetLoadedColor() const {return m_Color;}
   void Reset();
+  
+  void SetLoadedTextStatus(bool value);
+  void SetColorChangedStatus(bool value);
+  bool IsChanged();
 protected:
   Texture& GetTextTexture() {return m_TextTexture;}
   const Texture& GetTextTexture() const {return m_TextTexture;}
@@ -81,5 +87,9 @@ private:
   Texture m_TextTexture;
   Color m_Color;
   std::string m_LoadedText;
+private:
+  bool m_LoadedTextChanged,m_ColorChanged;
 };
+
+
 #endif //! __TEXT_HPP__

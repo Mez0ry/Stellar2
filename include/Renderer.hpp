@@ -8,12 +8,20 @@
 #include "Vector.hpp"
 
 class Texture;
-
 class Text;
 
 class Surface;
 
+enum class TextRenderType  : uint8_t{
+  BLENDED,
+  SOLID,
+  SHADED,
+  LCD
+};
+
 class Renderer {
+private:
+  
 public:
   Renderer() = default;
   Renderer(const Core::Ref<Window> window, int index = -1, uint32_t flags = SDL_RENDERER_SOFTWARE);
@@ -33,13 +41,13 @@ public:
   void SetRenderDrawColor(const Color& color);
   
   void Render(const Texture &texture);
+  void Render(Text& text, TextRenderType render_type);
   void BlitSurface(Surface& src,SDL_Surface* dst);
   void ScaledSurface(Surface& src,SDL_Surface* dst);
 public:
 /**
  * @todo primitives
  */
-  
 
 public:
   [[nodiscard]] SDL_Renderer *GetRenderer() const { return m_Renderer; }
@@ -55,4 +63,5 @@ public:
 private:
   SDL_Renderer *m_Renderer;
 };
+
 #endif //!__RENDERER_HPP__

@@ -66,6 +66,54 @@ void Renderer::Render(const Texture &texture) {
   }
 }
 
+void Renderer::Render(Text& text, TextRenderType render_type = TextRenderType::BLENDED)
+{
+  Surface surface;
+
+  if(text.IsChanged() || !(static_cast<const Texture &>(text).GetTexture())){
+    switch (render_type) 
+    {
+      case TextRenderType::BLENDED :{
+        surface = TTF_RenderText_Blended(text.GetSelfFont(), text.GetLoadedText().c_str(), text.GetLoadedColor());
+        break;
+      }
+      
+      case TextRenderType::LCD :{
+        surface = TTF_RenderText_LCD(text.GetSelfFont(), text.GetLoadedText().c_str(), text.GetLoadedColor(),{0,0,0,255});
+        break;
+      }
+      case TextRenderType::SHADED :{
+        surface = TTF_RenderText_Shaded(text.GetSelfFont(), text.GetLoadedText().c_str(), text.GetLoadedColor(),{0,0,0,255});
+        break;
+      }
+      
+      case TextRenderType::SOLID :{
+        surface = TTF_RenderText_Solid(text.GetSelfFont(), text.GetLoadedText().c_str(), text.GetLoadedColor());
+        break;
+      }
+
+      default:{
+        STELLAR_CORE_ERROR("Renderer::Render(Text& text, TextRenderType render_type = {0} ), error: using render type that doesnt exist",static_cast<uint8_t>(render_type));
+        break;
+      }
+    }
+
+    if (surface == nullptr)
+    {
+      STELLAR_CORE_ERROR("Text::LoadText, Failed to create text surface, SDL_ttf Error: {0}, Failed at {1}:{2}", TTF_GetError(),STELLAR_FILENAME,STELLAR_LINE);
+    }
+    
+    text->ShareSDLTexture(Texture::CreateTextureFromSurface((*this),surface));
+
+    text.SetColorChangedStatus(false);
+    text.SetLoadedTextStatus(false);
+  }
+  
+  
+  Render(static_cast<const Texture &>(text));
+
+}
+
 void Renderer::BlitSurface(Surface &src,SDL_Surface* dst){
   auto& dst_rect = src.GetRect<DestRect>();
   auto& src_rect = src.GetRect<SourceRect>();
