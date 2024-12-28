@@ -12,11 +12,18 @@ void EventHandler::PollEvents(){
       }
       case SDL_KEYDOWN:{
         KeyboardInput::ChangeState(m_Event.key.keysym.sym,true);
+        if(m_Event.key.state == SDL_PRESSED){
+          auto key_press_cnt_val = KeyboardInput::GetKeyPressesCounter(m_Event.key.keysym.sym);
+          KeyboardInput::SetKeyPressCounter(m_Event.key.keysym.sym,++key_press_cnt_val);
+        }
+
         break;
       }
-      
       case SDL_KEYUP:{
         KeyboardInput::ChangeState(m_Event.key.keysym.sym,false);
+        if(m_Event.key.state == SDL_RELEASED){
+          KeyboardInput::SetKeyPressCounter(m_Event.key.keysym.sym,-1);
+        }
         break;
       }
       

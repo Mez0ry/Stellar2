@@ -1,34 +1,30 @@
 #include "KeyboardInput.hpp"
 
-std::bitset<351> KeyboardInput::m_Keys = {0};
+std::bitset<std::numeric_limits<SDL_Keycode>::max()> KeyboardInput::m_Keys = {0};
+std::unordered_map<int32_t,int16_t> KeyboardInput::m_KeyPressesCounter = {{0,int16_t(-1)}};
 
-bool KeyboardInput::IsPressed(uint32_t key) {
-  if (IsKeyOutOfrange(key)) {
-    key = KeycodeFixedLayout(key);
-  }
+bool KeyboardInput::IsPressed(SDL_Keycode key) {
   return KeyboardInput::m_Keys[key];
 }
 
-bool KeyboardInput::IsReleased(uint32_t key) {
-  if (IsKeyOutOfrange(key)) {
-    key = KeycodeFixedLayout(key);
-  }
+bool KeyboardInput::IsReleased(SDL_Keycode key) {
   return !(KeyboardInput::m_Keys[key]);
 }
 
 uint32_t KeyboardInput::Size() noexcept { return KeyboardInput::m_Keys.size(); }
 
-void KeyboardInput::ChangeState(uint32_t key, bool value) {
-  if (IsKeyOutOfrange(key)) {
-    key = KeycodeFixedLayout(key);
-    key = std::clamp(key, 0u, 351u);
-  }
+void KeyboardInput::ChangeState(SDL_Keycode key, bool value) {
   KeyboardInput::m_Keys[key] = value;
 }
 
-int32_t KeyboardInput::KeycodeFixedLayout(const int32_t key_code) {
-  return (key_code - (SDLK_SCANCODE_MASK)) + 66;
+void KeyboardInput::SetKeyPressCounter(SDL_Keycode key, int16_t counter)
+{
+  KeyboardInput::m_KeyPressesCounter[key] = counter;
 }
-bool KeyboardInput::IsKeyOutOfrange(const uint32_t key) {
-  return (key > KeyboardInput::m_Keys.size());
+
+int16_t KeyboardInput::GetKeyPressesCounter(SDL_Keycode key)
+{
+  KeyboardInput::m_KeyPressesCounter.try_emplace(key,int16_t(-1));
+
+  return KeyboardInput::m_KeyPressesCounter[key];
 }
