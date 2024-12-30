@@ -31,6 +31,10 @@ class Memento{
    * @brief Clear stack of snapshots
    */
   void ClearSnapshots();
+  
+  bool IsEmpty() const {return m_SnaphotsStack.empty();}
+
+  constexpr operator bool() const {return !IsEmpty();}
 
   private:
   std::stack<TSnapObj> m_SnaphotsStack;
