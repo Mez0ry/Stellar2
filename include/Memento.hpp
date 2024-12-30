@@ -34,7 +34,7 @@ class Memento{
   
   bool IsEmpty() const {return m_SnaphotsStack.empty();}
 
-  constexpr operator bool() const {return !IsEmpty();}
+  explicit constexpr operator bool() const {return !IsEmpty();}
 
   private:
   std::stack<TSnapObj> m_SnaphotsStack;
