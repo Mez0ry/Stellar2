@@ -5,7 +5,7 @@
 #include <future>
 #include <iostream>
 #include <thread>
-
+#include "Logger.hpp"
 namespace helper {
 template <int... Is> struct index {};
 
@@ -43,6 +43,10 @@ public:
   }
 
   void Execute() { 
+    if(!m_Action){
+      STELLAR_CORE_ERROR("Failed to execute 'Action' its nullptr");
+      return;
+    }
     Execute(m_Args); 
   }
   
