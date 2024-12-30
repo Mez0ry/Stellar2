@@ -90,12 +90,16 @@ public:
     if (m_CurrentSceneHash == scene_hash)
       return;
     
-    //TODO impl function to share child scene 
     auto it = GetSceneIt<TScene>(m_RootScenesMap);
-    
+
+    if(it == m_RootScenesMap.end()){
+      STELLAR_CORE_ERROR("Failed to get scene from root scenes map, transition won't be made");
+      return ;
+    }
+
     if(!IsRootOfChild<TScene>(m_CurrentSceneHash) && IsChildScene(m_CurrentSceneHash)){
       auto& scene_ref = *m_pCurrentScene;
-      STELLAR_CORE_WARN_ONCE("scene transition has been failed cos it was attempt to make a transition to  wrong root scene, from {0} scene to the root {1}",typeid(scene_ref).name(), typeid(TScene).name());
+      STELLAR_CORE_WARN_ONCE("scene transition has been failed cos it was attempt to make a transition to wrong root scene, from {0} scene to the root {1}",typeid(scene_ref).name(), typeid(TScene).name());
       return;
     }
 
@@ -103,7 +107,7 @@ public:
       m_pCurrentScene->OnDestroy();
       m_pCurrentScene = nullptr;
     }
-
+     
     m_pCurrentScene = it->second;
     m_pCurrentScene->OnCreate();
     m_CurrentSceneHash = scene_hash;
