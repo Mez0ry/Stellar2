@@ -21,6 +21,20 @@ void Window::SetMousePositionInWindow(const Core::Ref<Window> window,Vec2i pos){
   SDL_WarpMouseInWindow(*window,pos.x,pos.y);
 }
 
+void Window::SetOpacity(float opacity)
+{
+  if(SDL_SetWindowOpacity((*this),opacity) == -1){
+    STELLAR_CORE_ERROR("Failed to set the window opacity, reason: {0}", SDL_GetError());
+  }
+}
+
+float Window::GetOpacity() const
+{
+  float curr_opacity = {};
+  SDL_GetWindowOpacity((*this),&curr_opacity);
+  return curr_opacity;
+}
+
 void Window::UpdateWindowSurface(){
     if(SDL_UpdateWindowSurface(m_Window)){
         STELLAR_CORE_ERROR("Window::UpdateWindowSurface,Failed to update window surface, SDL Error: {0}, Failed at {1}:{2}" , SDL_GetError(),STELLAR_FILENAME, STELLAR_LINE);

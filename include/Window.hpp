@@ -16,7 +16,13 @@ public:
   Window &operator=(Window &&) = delete;
 
   static void SetMousePositionInWindow(const Core::Ref<Window> window,Vec2i pos);
-
+  /**
+   * @brief Sets opacity of the window
+   * @param opacity range 0.0 - 1.0
+   */
+  void SetOpacity(float opacity);
+  float GetOpacity() const;
+  
   void UpdateWindowSurface();
   void CreateWindowSurface();
 
@@ -41,4 +47,5 @@ private:
   SDL_Surface* m_WindowSurface;
   Surface m_IconSurface;
 };
+
 #endif //! __WINDOW_HPP__   
