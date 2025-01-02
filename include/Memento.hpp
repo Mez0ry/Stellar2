@@ -6,6 +6,7 @@ template <typename TSnapObj>
 class Memento{
   public:
   Memento() = default;
+  Memento(const TSnapObj& obj);
   ~Memento() = default;
 
   /**
@@ -41,6 +42,11 @@ class Memento{
 };
 
 template <typename TSnapObj>
+Memento<TSnapObj>::Memento(const TSnapObj& obj){
+    Save(obj);
+}
+
+template <typename TSnapObj>
 void Memento<TSnapObj>::Save(const TSnapObj &obj)
 {
     if(!m_SnaphotsStack.empty()){
@@ -58,7 +64,7 @@ void Memento<TSnapObj>::Push(const TSnapObj &obj)
 template <typename TSnapObj>
 TSnapObj Memento<TSnapObj>::GetState() const
 {
-    return m_SnaphotsStack.top();
+    return (m_SnaphotsStack.empty()) ? TSnapObj(): m_SnaphotsStack.top();
 }
 
 template <typename TSnapObj>
@@ -74,7 +80,11 @@ void Memento<TSnapObj>::Restore(TSnapObj& obj)
 template <typename TSnapObj>
 void Memento<TSnapObj>::ClearSnapshots()
 {
-     for(auto i = 0;i < m_SnaphotsStack.size();i++){
+    if(m_SnaphotsStack.empty()){
+        return;
+    }
+    
+     for(size_t i = 0;i < m_SnaphotsStack.size();i++){
       m_SnaphotsStack.pop();
     }
 }
