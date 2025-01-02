@@ -46,7 +46,7 @@ public:
       m_BtnPrevSize = this->GetSize();
 
       if(m_Text && this->SelfTexture()){
-        ScaleTextSizeToFit(renderer,m_Text);
+        ScaleTextSizeToFit(m_Text);
       }
     }
 
@@ -64,7 +64,7 @@ public:
   }
 
 private:
- void ScaleTextSizeToFit(const Core::Ref<Renderer> renderer,Text& text){
+ void ScaleTextSizeToFit(Text& text){
   auto src_size = ObjectSize(0,0);
   text->QueryTexture(text,nullptr,nullptr,&src_size);
   text->SetRect<SourceRect>({0,0},src_size);
