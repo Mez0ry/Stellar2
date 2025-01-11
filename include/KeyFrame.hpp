@@ -8,7 +8,7 @@ using keyframe_action_t = Action<double>;
 class KeyFrame{
 public:
     KeyFrame();
-
+    
     void Setup(float frame_duration, keyframe_action_t action);
 
     /**
@@ -20,6 +20,11 @@ public:
     
     void Restart();
 
+    float GetElapsedFrames() const;
+    
+    bool IsActionEmpty() const;
+    
+    
 private:
     float m_ActionDuration, m_ElapsedFrames;
     keyframe_action_t m_Action;

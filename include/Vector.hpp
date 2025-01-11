@@ -262,7 +262,7 @@ struct fmt::formatter<Vec2<TValue>> {
     }
 
     template <typename Context>
-    auto format(const Vec2<TValue>& p, Context& ctx) {
+    auto format(const Vec2<TValue>& p, Context& ctx) const {
       return format_to(ctx.out(), "Vector<{}>({}, {})", typeid(TValue).name(),p.x, p.y);
     }
 };

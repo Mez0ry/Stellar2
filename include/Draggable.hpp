@@ -10,10 +10,8 @@ template <class TDerived,typename ... TArgs>
 class Draggable : public TDerived{
 private:
   Action<TArgs ...> m_Action;
-  double m_t;
-  const double m_smoothness = 0.00005555555; // the lower the smoother
 public:
-  Draggable() : m_t(0.0),m_IsDraggable(false){}
+  Draggable() : m_IsDraggable(false){}
   ~Draggable() = default;
   
   template<typename TOnDragAction>
@@ -28,19 +26,9 @@ public:
       auto mouse_pos = MouseInput::GetMousePosition();
       ObjectSize half_object_size = GetDerived().template GetSize<DestRect>() / 2;
       const auto& texture_pos = GetDerived().template GetPosition<DestRect>();
-
-      if(!m_IsDraggable){
-        m_t = 0.0;
-      }
       
       Vec2i final_pos = Vec2i{mouse_pos.x - half_object_size.GetWidth() ,mouse_pos.y - half_object_size.GetHeight()};
-      final_pos = Vec2i::Lerp(texture_pos,final_pos,m_t);
       GetDerived().template SetPosition<DestRect>(final_pos);
-      
-      if(m_t < 1.0 && m_t >= 0){
-        m_t += m_smoothness;
-        m_t = std::clamp(m_t,0.0,1.0);
-      }
     }
 
     m_IsDraggable = true;

@@ -39,5 +39,15 @@ namespace Stellar
         m_ElapsedFrames = 0;
         m_IsFinished = false;
     }
-    
+
+    float KeyFrame::GetElapsedFrames() const
+    {
+        return m_ElapsedFrames;
+    }
+
+    bool KeyFrame::IsActionEmpty() const
+    {
+        return static_cast<bool>(!m_Action);
+    }
+
 }

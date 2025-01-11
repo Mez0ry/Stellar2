@@ -115,5 +115,5 @@ double EaseInOutBounce(double t) {
   }
 }
 
-} // 1namespace Easing
+} // !namespace Easing
 }   // !namespace Stellar

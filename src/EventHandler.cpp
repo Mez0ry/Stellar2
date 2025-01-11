@@ -3,7 +3,8 @@
 void EventHandler::PollEvents(){
     WindowInput::Reset();
     MouseInput::ResetMouseState();
-
+    KeyboardInput::ResetKeysState();
+    
     while(SDL_PollEvent(&m_Event)){
     switch(m_Event.type){
       case SDL_QUIT:{
@@ -12,6 +13,8 @@ void EventHandler::PollEvents(){
       }
       case SDL_KEYDOWN:{
         KeyboardInput::ChangeState(m_Event.key.keysym.sym,true);
+        KeyboardInput::SetKeyState(m_Event.key.keysym.sym,KeyState::KEY_DOWN);
+
         if(m_Event.key.state == SDL_PRESSED){
           auto key_press_cnt_val = KeyboardInput::GetKeyPressesCounter(m_Event.key.keysym.sym);
           KeyboardInput::SetKeyPressCounter(m_Event.key.keysym.sym,++key_press_cnt_val);
@@ -21,6 +24,8 @@ void EventHandler::PollEvents(){
       }
       case SDL_KEYUP:{
         KeyboardInput::ChangeState(m_Event.key.keysym.sym,false);
+        KeyboardInput::SetKeyState(m_Event.key.keysym.sym,KeyState::KEY_UP);
+
         if(m_Event.key.state == SDL_RELEASED){
           KeyboardInput::SetKeyPressCounter(m_Event.key.keysym.sym,-1);
         }

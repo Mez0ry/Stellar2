@@ -1,9 +1,10 @@
 #ifndef __STELLAR_EASING_HPP__
 #define __STELLAR_EASING_HPP__
-#include <math.h>
-
+#include <cmath>
+#include <functional>
 namespace Stellar{
-
+    using easing_type_t  = std::function<double(double)>;
+    
     namespace Easing{
         double EaseInSine(double t);
         double EaseOutSine(double t);

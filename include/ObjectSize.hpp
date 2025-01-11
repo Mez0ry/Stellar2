@@ -1,7 +1,7 @@
 #ifndef __OBJECT_SIZE_HPP__
 #define __OBJECT_SIZE_HPP__
 #include <cstdint>
-
+#include <fmt/format.h>
 struct ObjectSize {
   ObjectSize() = default;
   ObjectSize(int width, int height) : w_(width), h_(height) {}
@@ -23,6 +23,16 @@ struct ObjectSize {
 
   friend ObjectSize operator+(ObjectSize lhs, const ObjectSize &rhs) {
     return (lhs += rhs);
+  }
+
+  friend ObjectSize operator*(ObjectSize lhs, const ObjectSize &rhs) {
+    return (lhs *= rhs);
+  }
+
+  ObjectSize& operator*=(const ObjectSize &rhs) {
+    this->w_ *= rhs.w_;
+    this->h_ *= rhs.h_;
+    return (*this);
   }
 
   ObjectSize &operator-=(const ObjectSize &rhs) {
@@ -49,47 +59,47 @@ struct ObjectSize {
 /**
  * @todo default math operations on scalar
 */
-   friend ObjectSize operator+(ObjectSize lhs, const uint8_t scalar) {
+   friend ObjectSize operator+(ObjectSize lhs, const int scalar) {
     lhs.w_ += scalar;
     lhs.h_ += scalar;
     return lhs;
   }
 
-  friend ObjectSize operator-(ObjectSize lhs, const uint8_t scalar) {
+  friend ObjectSize operator-(ObjectSize lhs, const int scalar) {
     lhs.w_ -= scalar;
     lhs.h_ -= scalar;
     return lhs;
   }
 
-  friend ObjectSize operator*(ObjectSize lhs, const uint8_t scalar) {
+  friend ObjectSize operator*(ObjectSize lhs, const int scalar) {
     lhs.w_ *= scalar;
     lhs.h_ *= scalar;
     return lhs;
   }
 
-  friend ObjectSize operator/(ObjectSize lhs, const uint8_t scalar) {
+  friend ObjectSize operator/(ObjectSize lhs, const int scalar) {
     lhs.w_ /= scalar;
     lhs.h_ /= scalar;
     return lhs;
   }
   
-  ObjectSize &operator+=(const uint8_t scalar) {
+  ObjectSize &operator+=(const int scalar) {
     (*this) = (*this) + scalar;
     return (*this);
   }
 
-  ObjectSize &operator-=(const uint8_t scalar) {
+  ObjectSize &operator-=(const int scalar) {
     (*this) = (*this) - scalar;
     return (*this);
   }
 
-  ObjectSize &operator*=(const uint8_t scalar) {
+  ObjectSize &operator*=(const int scalar) {
 
     (*this) = (*this) * scalar;
     return (*this);
   }
 
-  ObjectSize &operator/=(const uint8_t scalar) {
+  ObjectSize &operator/=(const int scalar) {
     (*this) = (*this) / scalar;
     return (*this);
   }
@@ -106,7 +116,7 @@ struct ObjectSize {
     return (this->h_ < other.h_ && this->w_ < other.w_);
   }
 
-  bool operator<(const uint8_t scalar) const{
+  bool operator<(const int scalar) const{
     return (this->h_ < scalar && this->w_ < scalar);
   }
 
@@ -114,12 +124,23 @@ struct ObjectSize {
     return (this->h_ > other.h_ && this->w_ > other.w_);
   }
 
-  bool operator>(const uint8_t scalar) const{
+  bool operator>(const int scalar) const{
     return (this->h_ > scalar && this->w_ > scalar);
   }
   
 private:
   int w_, h_;
+};
+template <>
+struct fmt::formatter<ObjectSize> {
+    constexpr auto parse(format_parse_context& ctx) {
+      return ctx.end();
+    }
+
+    template <typename Context>
+    auto format(const ObjectSize& p, Context& ctx) const{
+      return format_to(ctx.out(), "obj_size(w: {0},h: {1})", p.GetWidth(),p.GetHeight());
+    }
 };
 
 #endif //! __OBJECT_SIZE_HPP__

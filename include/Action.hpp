@@ -23,6 +23,29 @@ public:
   Action() = default;
   ~Action() = default;
 
+  Action(const Action& other){
+    m_Args = other.m_Args;
+    m_Action = other.m_Action;
+  }
+
+  Action(Action&& other){
+    m_Args = std::move(other.m_Args);
+    m_Action = std::move(other.m_Action);
+  }
+
+
+  Action& operator=(const Action& other){
+    m_Args = other.m_Args;
+    m_Action = other.m_Action;
+    return (*this);
+  }
+
+  Action& operator=(Action&& other){
+    m_Args = std::move(other.m_Args);
+    m_Action = std::move(other.m_Action);
+    return (*this);
+  }
+
   void operator()(){
     Execute();
   }
