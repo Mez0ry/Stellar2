@@ -3,6 +3,9 @@ Stellar.log
 .vscode
 todo
 
+CMakePresets.json
+CMakeUserPresets.json
+
 ##### Windows
 # Windows thumbnail cache files
 Thumbs.db
