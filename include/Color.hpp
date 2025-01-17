@@ -193,14 +193,14 @@ struct Color {
 private:
 };
 
-constexpr Color color_red_t    = Color(255,0,0,255);
-constexpr Color color_blue_t   = Color(0,0,255,255);
-constexpr Color color_aqua_t   = Color(0,255,255,255);
-constexpr Color color_yellow_t = Color(250,250,55,255);
-constexpr Color color_purple_t = Color(160,32,240,255);
-constexpr Color color_white_t  = Color(255,255,255,255);
-constexpr Color color_black_t  = Color(0,0,0,255);
-constexpr Color color_green_t  = Color(0,255,0,255);
-constexpr Color color_orange_t = Color(255,165,0,255);
+inline constexpr Color color_red_t    = Color(255,0,0,255);
+inline constexpr Color color_blue_t   = Color(0,0,255,255);
+inline constexpr Color color_aqua_t   = Color(0,255,255,255);
+inline constexpr Color color_yellow_t = Color(250,250,55,255);
+inline constexpr Color color_purple_t = Color(160,32,240,255);
+inline constexpr Color color_white_t  = Color(255,255,255,255);
+inline constexpr Color color_black_t  = Color(0,0,0,255);
+inline constexpr Color color_green_t  = Color(0,255,0,255);
+inline constexpr Color color_orange_t = Color(255,165,0,255);
 
 #endif //!__STELLAR_COLOR_HPP__
