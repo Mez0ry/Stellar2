@@ -5,33 +5,40 @@
 #include <type_traits>
 #include <functional>
 #include "Action.hpp"
+#include "KeyFrame.hpp"
+#include <Renderer.hpp>
+#include "Easing.hpp"
 
 template <class TDerived,typename ... TArgs>
 class Draggable : public TDerived{
 private:
-  Action<TArgs ...> m_Action;
+  Stellar::KeyFrame m_EasingKf;
+  Stellar::easing_type_t m_Easing;
+  int m_EaseDuration;
 public:
-  Draggable() : m_IsDraggable(false){}
+  Draggable() : m_IsDraggable(false), m_Easing(Stellar::Easing::EaseInSine),m_EaseDuration(1){}
   ~Draggable() = default;
-  
-  template<typename TOnDragAction>
-  void OnDrag(TOnDragAction on_drag_action){
-    m_Action = on_drag_action;
+
+  void OnDrag(int ease_duration,const Stellar::keyframe_action_t& action,Stellar::easing_type_t easing = Stellar::Easing::EaseInSine){
+    m_EaseDuration = ease_duration;
+    m_Easing = easing;
+
+
+    m_EasingKf.Setup(m_EaseDuration,action,true);
   }
 
+  /**
+   * @brief drags the object
+   */
   void Drag(){
-    if(m_Action){
-      m_Action();
-    }else{
-      auto mouse_pos = MouseInput::GetMousePosition();
-      ObjectSize half_object_size = GetDerived().template GetSize<DestRect>() / 2;
-      const auto& texture_pos = GetDerived().template GetPosition<DestRect>();
-      
-      Vec2i final_pos = Vec2i{mouse_pos.x - half_object_size.GetWidth() ,mouse_pos.y - half_object_size.GetHeight()};
-      GetDerived().template SetPosition<DestRect>(final_pos);
-    }
-
+    
     m_IsDraggable = true;
+  }
+
+  void UpdateDragging( float dt){
+    if(!m_EasingKf.IsActionEmpty() && m_IsDraggable){
+      m_EasingKf.Update(dt);
+    }
   }
 
   void StopDragging(){
@@ -43,4 +50,5 @@ private:
   bool m_IsDraggable;
   auto& GetDerived() {return static_cast<TDerived&>((*this)); }
 };
+
 #endif //!__STELLAR_DRAGGABLE_HPP__
