@@ -9,7 +9,7 @@ class KeyFrame{
 public:
     KeyFrame();
     
-    void Setup(float frame_duration, keyframe_action_t action);
+    void Setup(float frame_duration, keyframe_action_t action, bool cyclic = false);
 
     /**
      * @returns returns true if the 'action' was called during the specified frame duration
@@ -29,6 +29,7 @@ private:
     float m_ActionDuration, m_ElapsedFrames;
     keyframe_action_t m_Action;
     bool m_IsFinished;
+    bool m_IsCyclic;
 };
 
 }

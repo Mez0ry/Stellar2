@@ -6,19 +6,23 @@ namespace Stellar
         
     }
 
-    void KeyFrame::Setup(float frame_duration, keyframe_action_t action)
+    void KeyFrame::Setup(float frame_duration, keyframe_action_t action,bool cyclic)
     {
         m_ActionDuration = frame_duration;
         m_ElapsedFrames = 0;
         m_Action = action;
         
         m_IsFinished = false;
+        m_IsCyclic = cyclic;
     }
 
     bool KeyFrame::Update(float dt)
     {
         double t = (m_ElapsedFrames / m_ActionDuration);
         if(m_ElapsedFrames >= m_ActionDuration){
+            if(m_IsCyclic){
+                Restart();
+            }
             m_IsFinished = true;
             return m_IsFinished;
         }
