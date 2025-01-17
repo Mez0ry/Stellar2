@@ -1,7 +1,7 @@
 #include "KeyboardInput.hpp"
 
-std::bitset<std::numeric_limits<SDL_Keycode>::max()> KeyboardInput::m_Keys = {0};
-std::unordered_map<int32_t,int16_t> KeyboardInput::m_KeyPressesCounter = {{0,int16_t(-1)}};
+std::unordered_map<SDL_Keycode,bool> KeyboardInput::m_Keys = {};
+std::unordered_map<int32_t,int16_t> KeyboardInput::m_KeyPressesCounter = {};
 std::unordered_map<SDL_Keycode,KeyState> KeyboardInput::m_KeysState = {};
 
 bool KeyboardInput::IsPressed(SDL_Keycode key) {

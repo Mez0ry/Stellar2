@@ -34,7 +34,7 @@ public:
 
   static void ResetKeysState();
 private:
-  static std::bitset<std::numeric_limits<SDL_Keycode>::max()> m_Keys;
+  static std::unordered_map<SDL_Keycode,bool> m_Keys;
   static std::unordered_map<int32_t,int16_t> m_KeyPressesCounter;
   static std::unordered_map<SDL_Keycode,KeyState> m_KeysState;
 };
