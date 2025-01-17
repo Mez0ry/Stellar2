@@ -22,7 +22,7 @@ struct Vec2 {
   TValue x, y;
 
   Vec2() = default;
-  Vec2(TValue pos_x, TValue pos_y) : x(pos_x), y(pos_y) {}
+  constexpr Vec2(TValue pos_x, TValue pos_y) : x(pos_x), y(pos_y) {}
   Vec2(Vec2&& other) noexcept{
     swap(*this,other);
     other.clear();
