@@ -1,16 +1,17 @@
+import os, shutil
 from conan import ConanFile
 from conan.tools.cmake.cmake import CMake
 from conan.tools.cmake import CMakeToolchain
 from conan.tools.build import check_max_cppstd, check_min_cppstd, default_cppstd
 from conan.tools.cmake import cmake_layout
-from conan.tools.files import copy
+from conan.tools.files import copy, save, load
 
 class StellarLibrary(ConanFile):
     name = "StellarLibrary"
     version = "1.0"
     settings = "os", "compiler", "arch", "build_type"
     generators = "AutotoolsDeps","VirtualRunEnv", "VirtualBuildEnv","CMakeDeps", "CMakeToolchain"
-    
+
     def validate(self):
         default_cppstd(self,any,"-std=c++17")
 
@@ -32,7 +33,16 @@ class StellarLibrary(ConanFile):
     
     def package(self):
         copy(self, "*.so", self.build_folder, os.path.join(self.package_folder, "lib"))
-        copy(self, "*.o", self.build_folder, os.path.join(self.package_folder, "lib"))
-    
+        copy(self, "*.a", self.build_folder, os.path.join(self.package_folder, "lib"))
+        copy(self, "*.dll", self.build_folder, os.path.join(self.package_folder, "lib"))
+        copy(self, "*.lib", self.build_folder, os.path.join(self.package_folder, "lib"))
+
     def layout(self):
         cmake_layout(self)
+        self.folders.source = "src"
+        build_type = str(self.settings.build_type).lower()
+        self.folders.build = "build".format(build_type)
+        self.folders.generators = os.path.join(self.folders.build, "conan_gens")
+
+    def source(self):
+        self.source_folder = "build"

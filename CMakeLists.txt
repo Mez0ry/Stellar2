@@ -11,6 +11,13 @@ set(CMAKE_TOOLCHAIN_FILE ${CMAKE_BINARY_DIR}/generators/conan_toolchain.cmake)
 set(LibraryName Stellar)
 project(${LibraryName})
 
+option(BUILD_USING_EXTERNAL_SDL2 "Build using external SDL2" OFF)
+option(BUILD_USING_EXTERNAL_SDL2_image "Build using external SDL2 image" OFF)
+option(BUILD_USING_EXTERNAL_SDL2_ttf "Build using external SDL2 ttf" OFF)
+option(BUILD_USING_EXTERNAL_SDL2_mixer "Build using external SDL2 mixer" OFF)
+option(BUILD_USING_EXTERNAL_SPDLOG "Build using external spdlog" OFF)
+option(BUILD_ALL_EXTERNALLY "Build every 3rd party libs using external copies" OFF)
+
 set(OS_BITNESS 64)
 
 if(CMAKE_SIZEOF_VOID_P EQUAL 4)
@@ -56,4 +63,34 @@ add_library(${LibraryName} STATIC
     ${PROJECT_SOURCE_FILES} ${PROJECT_HEADER_FILES}
 )
 
-target_link_libraries(${LibraryName} PUBLIC spdlog::spdlog SDL2::SDL2 SDL2_image::SDL2_image sdl_ttf::sdl_ttf SDL2_mixer::SDL2_mixer fmt::fmt )
+target_link_libraries(${LibraryName}  ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARIES} ${SDL2_TTF_LIBRARIES} ${SDL2_MIXER_LIBRARIES} ${SPDLOG_LIBRARIES})	
+
+if(BUILD_USING_EXTERNAL_SDL2 OR BUILD_ALL_EXTERNALLY)
+	target_link_libraries(${LibraryName} ${SDL2_LIBRARIES})
+else()
+	target_link_libraries(${LibraryName} SDL2::SDL2)
+endif()
+
+if(BUILD_USING_EXTERNAL_SDL2_image OR BUILD_ALL_EXTERNALLY)
+	target_link_libraries(${LibraryName} ${SDL2_IMAGE_LIBRARIES})
+else()
+	target_link_libraries(${LibraryName} SDL2_image::SDL2_image)
+endif()
+
+if(BUILD_USING_EXTERNAL_SDL2_ttf OR BUILD_ALL_EXTERNALLY)
+	target_link_libraries(${LibraryName} ${SDL2_TTF_LIBRARIES})
+else()
+	target_link_libraries(${LibraryName} sdl_ttf::sdl_ttf)
+endif()
+
+if(BUILD_USING_EXTERNAL_SDL2_mixer OR BUILD_ALL_EXTERNALLY) 
+	target_link_libraries(${LibraryName} ${SDL2_MIXER_LIBRARIES})
+else()
+	target_link_libraries(${LibraryName} SDL2_mixer::SDL2_mixer)
+endif()
+
+if(BUILD_USING_EXTERNAL_SPDLOG OR BUILD_ALL_EXTERNALLY)
+	target_link_libraries(${LibraryName} ${SPDLOG_LIBRARIES})
+else()
+	target_link_libraries(${LibraryName} spdlog::spdlog fmt::fmt)
+endif()
