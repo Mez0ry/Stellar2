@@ -103,3 +103,16 @@ double Texture::RotateTowards(const Texture& texture){
   m_Angle = Angled::Rad2Degree(Vec2i::GetRotationAngle(texture.GetRect().Center(),texture.GetRect().Center()));
   return m_Angle.GetAngle();
 }
+
+Core::Ref<SDL_Texture> Texture::DeepCopySDLTexture()
+{
+  return Core::Ref<SDL_Texture>(m_Texture.get(), TextureDeleter());
+}
+
+Texture Texture::DeepCopy()
+{
+  Texture texture;
+  texture = (*this);
+  texture.ShareSDLTexture(this->DeepCopySDLTexture());
+  return texture;
+}

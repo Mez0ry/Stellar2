@@ -252,6 +252,10 @@ public:
 
   operator Core::Ref<SDL_Texture>() const noexcept { return m_Texture; }
 
+  Core::Ref<SDL_Texture> DeepCopySDLTexture();
+  
+  Texture DeepCopy();
+
 private:
   Core::Ref<SDL_Texture> m_Texture;
 };
