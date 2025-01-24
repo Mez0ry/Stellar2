@@ -2,14 +2,15 @@ cmake_minimum_required(VERSION 3.16 FATAL_ERROR)
 
 include(FindPackageHandleStandardArgs)
 include(CheckIPOSupported)
-check_ipo_supported(RESULT ipo_is_supported OUTPUT error)
+check_ipo_supported(RESULT ipo_is_supported OUTPUT error LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED YES)
-set(CMAKE_TOOLCHAIN_FILE ${CMAKE_BINARY_DIR}/generators/conan_toolchain.cmake)
+set(CMAKE_TOOLCHAIN_FILE ${CMAKE_BINARY_DIR}/conan_gens/conan_toolchain.cmake)
 
 set(LibraryName Stellar)
 project(${LibraryName})
+set(CMAKE_INTERPROCEDURAL_OPTIMIZATION TRUE)
 
 option(BUILD_USING_EXTERNAL_SDL2 "Build using external SDL2" OFF)
 option(BUILD_USING_EXTERNAL_SDL2_image "Build using external SDL2 image" OFF)
@@ -32,13 +33,20 @@ if(MSVC)
 	#set_target_properties("${LibraryName}" PROPERTIES LINK_FLAGS "/SUBSYSTEM:WINDOWS /ENTRY:mainCRTStartup")
 endif()
 
+if( ipo_is_supported )
+  message(STATUS "IPO / LTO enabled")
+  set_property(TARGET ${ProjectName} PROPERTY INTERPROCEDURAL_OPTIMIZATION TRUE)
+else()
+  message(STATUS "IPO / LTO not supported: <${error}>")
+endif()
+
 set(STELLAR_OUTPUT_DIR "${CMAKE_SOURCE_DIR}/build/lib/${OS_BITNESS}/${CMAKE_BUILD_TYPE}")
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${STELLAR_OUTPUT_DIR}")
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${STELLAR_OUTPUT_DIR}")
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${STELLAR_OUTPUT_DIR}")
 
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/build/generators")
-list(APPEND CMAKE_PREFIX_PATH "${CMAKE_CURRENT_LIST_DIR}/build/generators")
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/build/conan_gens")
+list(APPEND CMAKE_PREFIX_PATH "${CMAKE_CURRENT_LIST_DIR}/build/conan_gens")
 
 find_package(SDL2 REQUIRED)
 find_package(SDL2_image REQUIRED)
@@ -46,6 +54,7 @@ find_package(SDL2_ttf REQUIRED)
 find_package(SDL2_mixer REQUIRED)
 find_package(spdlog REQUIRED)
 find_package(fmt REQUIRED)
+
 
 include_directories(${LibraryName} ${CMAKE_CURRENT_SOURCE_DIR}/include)
 include_directories(${LibraryName} ${SDL2_INCLUDE_DIRS})
@@ -63,7 +72,11 @@ add_library(${LibraryName} STATIC
     ${PROJECT_SOURCE_FILES} ${PROJECT_HEADER_FILES}
 )
 
-target_link_libraries(${LibraryName}  ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARIES} ${SDL2_TTF_LIBRARIES} ${SDL2_MIXER_LIBRARIES} ${SPDLOG_LIBRARIES})	
+if(BUILD_USING_EXTERNAL_SPDLOG OR BUILD_ALL_EXTERNALLY)
+	target_link_libraries(${LibraryName} ${SPDLOG_LIBRARIES})
+else()
+	target_link_libraries(${LibraryName} spdlog::spdlog fmt::fmt)
+endif()
 
 if(BUILD_USING_EXTERNAL_SDL2 OR BUILD_ALL_EXTERNALLY)
 	target_link_libraries(${LibraryName} ${SDL2_LIBRARIES})
@@ -87,10 +100,4 @@ if(BUILD_USING_EXTERNAL_SDL2_mixer OR BUILD_ALL_EXTERNALLY)
 	target_link_libraries(${LibraryName} ${SDL2_MIXER_LIBRARIES})
 else()
 	target_link_libraries(${LibraryName} SDL2_mixer::SDL2_mixer)
-endif()
-
-if(BUILD_USING_EXTERNAL_SPDLOG OR BUILD_ALL_EXTERNALLY)
-	target_link_libraries(${LibraryName} ${SPDLOG_LIBRARIES})
-else()
-	target_link_libraries(${LibraryName} spdlog::spdlog fmt::fmt)
 endif()
